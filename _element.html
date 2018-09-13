@@ -1,0 +1,53 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="poker-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .card-wrapper {
+        width: 200px;
+        height: 450px;
+        border-radius: 10px;
+        background-color: #FFFFFF;
+
+      }
+    </style>
+    <div class="card-wrapper" id="card-wrapper">
+      <div class="" id="">
+        A
+      </div>
+      <div class="card-illustration" id="card-illustration">
+        
+      </div>
+      <div class="" id="">
+        A 
+      </div>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * `poker-card`
+     * Custom element for drawing a Poker Card
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class PokerCard extends Polymer.Element {
+      static get is() { return 'poker-card'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'poker-card'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(PokerCard.is, PokerCard);
+  </script>
+</dom-module>

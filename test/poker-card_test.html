@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>poker-card test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../poker-card.html">
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <poker-card></poker-card>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ChangedPropertyTestFixture">
+      <template>
+        <poker-card kind="h"></poker-card>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="PropertyKindUppercaseTestFixture">
+      <template>
+        <poker-card kind="HEARTS"></poker-card>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="PropertyNumberNumericTestFixture">
+      <template>
+        <poker-card number="12"></poker-card>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="PropertyNumberStringTestFixture">
+      <template>
+        <poker-card number="J"></poker-card>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="PropertyKindSymbolTestFixture">
+      <template>
+        <poker-card kind="♦"></poker-card>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('poker-card', () => {
+
+        test('instantiating the element with default properties works', () => {
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.kind, 'Spades');
+          assert.equal(element.number, 'A');
+          const elementShadowRoot = element.shadowRoot;
+          const elementKind = elementShadowRoot.querySelector('.kind');
+          const elementNumber = elementShadowRoot.querySelector('.number');          
+          assert.equal(elementKind.innerHTML, '♠');
+          assert.equal(elementNumber.innerHTML, 'A');
+        });
+
+        test('setting a property on the element works', () => {
+          const element = fixture('ChangedPropertyTestFixture');
+          assert.equal(element.kind, 'h');
+          assert.equal(element.__kindSymbol, '♥');
+          const elementShadowRoot = element.shadowRoot;
+          const elementKind = elementShadowRoot.querySelector('.kind');
+          assert.equal(elementKind.innerHTML, '♥');
+        });
+
+        test('setting a property on the element works', () => {
+          const element = fixture('PropertyKindUppercaseTestFixture');
+          assert.equal(element.kind, 'HEARTS');
+          assert.equal(element.__kindSymbol, '♥');
+          const elementShadowRoot = element.shadowRoot;
+          const elementKind = elementShadowRoot.querySelector('.kind');
+          assert.equal(elementKind.innerHTML, '♥');
+        });
+
+        test('setting a property on the element works', () => {
+          const element = fixture('PropertyNumberNumericTestFixture');
+          assert.equal(element.number, 'Q');
+          assert.equal(element.__numberNumeric, 12);
+          const elementShadowRoot = element.shadowRoot;
+          const elementNumber = elementShadowRoot.querySelector('.number'); 
+          assert.equal(elementNumber.innerHTML, 'Q');
+        });
+
+        test('setting a property on the element works', () => {
+          const element = fixture('PropertyNumberStringTestFixture');
+          assert.equal(element.number, 'J');
+          assert.equal(element.__numberNumeric, 11);
+          const elementShadowRoot = element.shadowRoot;
+          const elementNumber = elementShadowRoot.querySelector('.number'); 
+          assert.equal(elementNumber.innerHTML, 'J');
+        });
+
+        test('setting a property on the element works', () => {
+          const element = fixture('PropertyKindSymbolTestFixture');
+          assert.equal(element.kind, '♦');
+          assert.equal(element.__kindSymbol, '♦');
+          const elementShadowRoot = element.shadowRoot;
+          const elementKind = elementShadowRoot.querySelector('.kind');
+          assert.equal(elementKind.innerHTML, '♦');
+        });
+
+
+      });
+    </script>
+
+  </body>
+</html>

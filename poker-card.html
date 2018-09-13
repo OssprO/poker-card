@@ -1,0 +1,234 @@
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+
+<dom-module id="poker-card">
+  <template>
+    <style>
+      
+      :host {
+        --color-red: #df2b2b;
+        --color-black: #141415;
+        --number-font: 'Roboto', 'Noto', sans-serif;
+        --symbol-font: var(--number-font);
+
+        font-family: var(--number-font);
+        display: block;
+      }
+
+      .card-wrapper {
+        width: 250px;
+        height: 350px;
+        border-radius: 10px;
+        background-color: #FFFFFF;
+        box-shadow: 2px 2px 10px 5px #E1E1E1;
+        display: flex;
+        margin: 5px;
+      }
+
+      .card-wrapper.color-red {
+        color: var(--color-red);
+      }
+
+      .card-wrapper.color-black {
+        color: var(--color-black);
+      }
+
+      .card-number-bottom {
+        align-self: flex-end;
+        transform: rotate(180deg);
+      }
+
+      .card-illustration {
+        align-self: center;
+        justify-content: center;
+        width: 250px;
+        height: 250px;
+      }
+      .card-number-top {
+        align-self: flex-start;
+        justify-content: flex-end;
+      }
+
+      .card-number {
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .card-number span.number {
+          font-size: 28px;
+          font-family: val(--symbol-font);
+          text-transform: uppercase;
+          font-weight: bold;
+      }
+
+      .card-number span.kind {
+        font-size: 30px;
+        line-height: 24px;
+        
+        font-weight: bold;
+      }
+
+      .card-illustration {
+        border: 1px solid #000000;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: space-between;
+        justify-items: center;
+      }
+      
+      .kind-lg {
+        font-size: 40px;
+        text-align: center;
+      }
+      .kind-xl {
+        font-size: 100px;
+        text-align: center;
+      }
+    </style>
+    <div class$="card-wrapper {{__kindClass}}" id="card-wrapper">
+      <div class="card-number-top card-number" id="card-number-top">
+        <span class="number">[[number]]</span>
+        <span class="kind">[[__kindSymbol]]</span>
+      </div>
+      <div class="card-illustration" id="card-illustration">
+        <dom-repeat items="{{__symbolsArray}}">
+          <template>
+            <div class="kind-lg">[[__kindSymbol]]</div>
+          </template>
+        </dom-repeat>
+        <!-- <dom-if if="{{number == 'A'}}">
+          <template>
+            <div class="kind-xl">[[__kindSymbol]]</div>
+          </template>
+        </dom-if> -->
+      </div>
+      <div class="card-number-bottom card-number" id="card-number-bottom">
+        <span class="number">[[number]]</span>
+        <span class="kind">[[__kindSymbol]]</span>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * `poker-card`
+     * Custom element for drawing a Poker Card
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class PokerCard extends Polymer.Element {
+      static get is() { return 'poker-card'; }
+      static get properties() {
+        return {
+          kind: {
+            type: String,
+            value: 'Spades', // clubs (♣), diamonds (♦), hearts (♥) and spades (♠)
+            reflectToAttribute: true,
+            observer: '_kindChanged'
+          },
+          number: {
+            type: String,
+            value: 'A', // A(1) 2, 3, 4, 5, 6, 7, 8, 9, 10, J(11), Q(12), K(13) 
+            reflectToAttribute: true,
+            observer: '_numberChanged'
+          },
+          __kindSymbol: String,
+          __kindClass: String,
+          __numberNumeric: Number,
+          __symbolsArray: Array
+        };
+      }
+
+      _kindChanged(newValue, oldValue){
+        let symbol;
+        switch(newValue.trim().toLowerCase()){
+          case 'hearts':
+          case 'h':
+          case '♥':
+           this.__kindSymbol = '♥';
+           this.__kindClass = 'color-red';
+          break;
+          case 'diamonds':
+          case 'd':
+          case '♦':
+           this.__kindSymbol = '♦';
+           this.__kindClass = 'color-red';
+          break;
+          case 'spades':
+          case 's':
+          case '♠':
+           this.__kindSymbol = '♠';
+           this.__kindClass = 'color-black';
+          break;
+          case 'clubs':
+          case 'c':
+          case '♣':
+           this.__kindSymbol = '♣';
+           this.__kindClass = 'color-black';
+          break;
+          default:
+           this.__kindSymbol = '♠';
+           this.__kindClass = 'color-black';
+          break;
+        }
+        //this.__symbolsArray = this.$.setSymbolsArray('?');
+      }
+
+      _numberChanged(newValue, oldValue){
+        this.__symbolsArray = [];
+        
+        if(!isNaN(newValue)) {
+          if(newValue > 1 && newValue < 11){
+            for(let i=0; i < this.number; i++){
+              this.__symbolsArray.push(' ');
+            }
+          } else {
+            switch(Number(newValue)){
+              case 1:
+              default:
+                this.number = 'A';
+                this.__numberNumeric = 1;
+              break;
+              case 11:
+                this.number = 'J';
+                this.__numberNumeric = 11;
+              break;
+              case 12:
+                this.number = 'Q';
+                this.__numberNumeric = 12;
+              break;
+              case 13:
+                this.number = 'K';
+                this.__numberNumeric = 13;
+              break;
+            }
+          }
+        } else {
+          switch(newValue){
+            case 'A':
+            default:
+              this.__numberNumeric = 1;
+            break;
+            case 'J':
+              this.__numberNumeric = 11;
+            break;
+            case 'Q':
+              this.__numberNumeric = 12;
+            break;
+            case 'K':
+              this.__numberNumeric = 13;
+            break;
+          }
+        }
+        
+      }
+
+    }
+
+    window.customElements.define(PokerCard.is, PokerCard);
+  </script>
+</dom-module>
