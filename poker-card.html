@@ -5,8 +5,10 @@
     <style>
       
       :host {
-        --color-red: #df2b2b;
-        --color-black: #141415;
+        --color-red: #C00000;
+        --color-black: #050505;
+        --color-blue: #2000FF;
+        --color-green: #408000;
         --number-font: 'Roboto', 'Noto', sans-serif;
         --symbol-font: var(--number-font);
 
@@ -27,9 +29,17 @@
       .card-wrapper.color-red {
         color: var(--color-red);
       }
-
+      
       .card-wrapper.color-black {
         color: var(--color-black);
+      }
+
+      .card-wrapper.color-blue {
+        color: var(--color-blue);
+      }
+
+      .card-wrapper.color-green {
+        color: var(--color-green);
       }
 
       .card-number-bottom {
@@ -56,10 +66,10 @@
       }
 
       .card-number span.number {
-          font-size: 28px;
-          font-family: val(--symbol-font);
-          text-transform: uppercase;
-          font-weight: bold;
+        font-size: 28px;
+        font-family: val(--symbol-font);
+        text-transform: uppercase;
+        font-weight: bold;
       }
 
       .card-number span.kind {
@@ -98,11 +108,11 @@
             <div class="kind-lg">[[__kindSymbol]]</div>
           </template>
         </dom-repeat>
-        <!-- <dom-if if="{{number == 'A'}}">
+        <dom-if if="{{__isA(__numberNumeric)}}">
           <template>
             <div class="kind-xl">[[__kindSymbol]]</div>
           </template>
-        </dom-if> -->
+        </dom-if>
       </div>
       <div class="card-number-bottom card-number" id="card-number-bottom">
         <span class="number">[[number]]</span>
@@ -136,11 +146,20 @@
             reflectToAttribute: true,
             observer: '_numberChanged'
           },
+          fourColor: {
+            type: Boolean,
+            value: false,
+            observer: '_fourColorChanged'
+          },
           __kindSymbol: String,
           __kindClass: String,
           __numberNumeric: Number,
           __symbolsArray: Array
         };
+      }
+
+      __isA(number){
+        return number === 1;
       }
 
       _kindChanged(newValue, oldValue){
@@ -226,7 +245,19 @@
         }
         
       }
-
+      
+      _fourColorChanged(newValue, oldValue){
+        if( newValue){
+          switch(this.__kindSymbol){
+            case '♦':
+              this.__kindClass = 'color-blue';
+            break;
+            case '♣':
+              this.__kindClass = 'color-green';
+            break;
+          }
+        }
+      }
     }
 
     window.customElements.define(PokerCard.is, PokerCard);
